@@ -10,6 +10,7 @@ class Robot
 {
 public:
     void begin();
+    void stop();
     void update();
 
 private:

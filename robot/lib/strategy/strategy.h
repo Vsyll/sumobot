@@ -12,6 +12,7 @@ public:
 
     // Search
     void searchBasic();
+    void searchPatrol();
     void searchAggressive();
     void searchSweep();
 

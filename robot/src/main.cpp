@@ -7,7 +7,7 @@ Robot robot;
 
 void setup()
 {
-    pinMode(remotePin, INPUT);
+    pinMode(remotePin, INPUT_PULLDOWN);
     Serial.begin(115200);
 
     robot.begin();
@@ -19,5 +19,9 @@ void loop()
     if (statusRemote == HIGH)
     {
         robot.update();
+    }
+    else
+    {
+        robot.stop();
     }
 }

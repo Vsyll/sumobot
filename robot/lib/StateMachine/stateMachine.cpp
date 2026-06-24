@@ -15,6 +15,14 @@ void Robot::begin()
     readStrategy();
 }
 
+void Robot::stop()
+{
+    motor.drive(0,0);
+    state = SEARCH;
+    escapeState = ESCAPE_BACK;
+    lastSeenDirection = NONE;
+}
+
 void Robot::update()
 {
     if (SIMULATION_MODE)
@@ -47,22 +55,14 @@ void Robot::update()
 void Robot::updateState()
 {
     EdgeDirection edge;
-    uint16_t front1;
-    uint16_t front2;
 
     if (SIMULATION_MODE)
     {
         edge = simulatedEdge;
-
-        front1 = simulatedDistance;
-        front2 = 0;
     }
     else
     {
         edge = getEdgeDirection();
-
-        front1 = tof.getDistance(FRONT1);
-        front2 = tof.getDistance(FRONT2);
     }
 
     // =========================
@@ -156,7 +156,7 @@ void Robot::search()
             break;
 
         case STRATEGY_2:
-            strategy.searchAggressive();
+            strategy.searchPatrol();
             break;
 
         case STRATEGY_3:
@@ -215,7 +215,7 @@ void Robot::escape()
                     break;
             }
 
-            if (millis() - escapeTimer > 300)
+            if (millis() - escapeTimer > ESCAPE_BACK_TIME)
             {
                 escapeState = ESCAPE_TURN;
                 escapeTimer = millis();
@@ -243,7 +243,7 @@ void Robot::escape()
                     break;
             }
 
-            if (millis() - escapeTimer > 250)
+            if (millis() - escapeTimer > ESCAPE_TURN_TIME)
             {
                 escapeState = ESCAPE_BACK;
                 state = SEARCH;

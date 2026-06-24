@@ -119,8 +119,12 @@ enum StrategyID
     STRATEGY_3,
     STRATEGY_4
 };
+
 inline constexpr uint16_t ATTACK_DISTANCE = 600;
 inline constexpr uint16_t LAST_SEEN_TIMEOUT = 1000;
+
+inline constexpr uint16_t ESCAPE_BACK_TIME = 300;
+inline constexpr uint16_t ESCAPE_TURN_TIME = 250;
 
 // =====================================================
 // Manual State
