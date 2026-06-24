@@ -2,26 +2,45 @@
 
 #include "stateMachine.h"
 
-const int remotePin = PA0;
+bool robotRun = false;
+static bool lastRobotRun = false;
 Robot robot;
 
 void setup()
 {
-    pinMode(remotePin, INPUT_PULLDOWN);
     Serial.begin(115200);
+    Serial2.begin(115200);
+    
+    robotRun = false;
+    lastRobotRun = false;
 
     robot.begin();
+    robot.stop();
 }
 
 void loop()
 {
-    int statusRemote = digitalRead(remotePin);
-    if (statusRemote == HIGH)
+    if (Serial2.available() > 0 )
+    {
+        char dataMasuk = Serial2.read();
+        if (dataMasuk == '1')
+        {
+            robotRun = true;
+        } else if (dataMasuk == '0') {
+            robotRun = false;
+        }
+    }
+
+    if(robotRun)
     {
         robot.update();
     }
     else
     {
-        robot.stop();
+        if(lastRobotRun)
+        {
+            robot.stop();
+        }
     }
+    lastRobotRun = robotRun;
 }

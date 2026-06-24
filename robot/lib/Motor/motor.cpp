@@ -2,26 +2,23 @@
 
 void Motor::begin()
 {
-    pinMode(MOTOR_STBY_PIN, OUTPUT);
 
     pinMode(LEFT_IN1_PIN, OUTPUT);
     pinMode(LEFT_IN2_PIN, OUTPUT);
     pinMode(LEFT_PWM_PIN, OUTPUT);
 
     pinMode(RIGHT_IN1_PIN, OUTPUT);
-    //pinMode(RIGHT_IN2_PIN, OUTPUT);
+    pinMode(RIGHT_IN2_PIN, OUTPUT);
     pinMode(RIGHT_PWM_PIN, OUTPUT);
 
     analogWriteFrequency(MOTOR_PWM_FREQUENCY);
-    digitalWrite(MOTOR_STBY_PIN,HIGH);
-
     stop();
 }
 
 void Motor::drive(int16_t leftSpeed, int16_t rightSpeed)
 {
     setMotor(LEFT_PWM_PIN, LEFT_IN1_PIN, LEFT_IN2_PIN, leftSpeed);
-    //setMotor(RIGHT_PWM_PIN, RIGHT_IN1_PIN, RIGHT_IN2_PIN, rightSpeed);
+    setMotor(RIGHT_PWM_PIN, RIGHT_IN1_PIN, RIGHT_IN2_PIN, rightSpeed);
 }
 
 void Motor::stop()

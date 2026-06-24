@@ -6,8 +6,8 @@
 // I2C
 // =====================================================
 
-inline constexpr uint8_t I2C_SDA_PIN = PB7;
-inline constexpr uint8_t I2C_SCL_PIN = PB6;
+inline constexpr uint8_t I2C_SDA_PIN = PB9;
+inline constexpr uint8_t I2C_SCL_PIN = PB8;
 
 // =====================================================
 // Tof
@@ -21,10 +21,10 @@ enum SensorID
 
 inline constexpr uint8_t XSHUT_PINS[SENSOR_COUNT] =
 {
-    PA1, // FRONT1 
-    PA2, // FRONT2
-    PA3, // RIGHT
-    PA4  // LEFT
+    PA5, // FRONT1 
+    PA6, // FRONT2
+    PA4, // RIGHT
+    PA7  // LEFT
 };
 
 inline constexpr uint8_t SENSOR_ADDRESSES[SENSOR_COUNT] =
@@ -64,19 +64,15 @@ inline constexpr uint32_t SERIAL_BAUDRATE = 115200;
 // Motor TB6612
 // =====================================================
 
-inline constexpr uint8_t MOTOR_STBY_PIN = PB12;
-
 // Motor Kiri (A)
-
-inline constexpr uint8_t LEFT_IN1_PIN = PB0;
-inline constexpr uint8_t LEFT_IN2_PIN = PB1;
-inline constexpr uint8_t LEFT_PWM_PIN = PB6;
+inline constexpr uint8_t LEFT_IN1_PIN = PB12;
+inline constexpr uint8_t LEFT_IN2_PIN = PB13;
+inline constexpr uint8_t LEFT_PWM_PIN = PB14;
 
 // Motor Kanan (B)
-
-inline constexpr uint8_t RIGHT_IN1_PIN = PB10;
-//inline constexpr uint8_t RIGHT_IN2_PIN = PB11;
-inline constexpr uint8_t RIGHT_PWM_PIN = PB7;
+inline constexpr uint8_t RIGHT_IN1_PIN = PA11;
+inline constexpr uint8_t RIGHT_IN2_PIN = PA12;
+inline constexpr uint8_t RIGHT_PWM_PIN = PA10;
 
 // =====================================================
 // Motor Configuration
@@ -92,15 +88,15 @@ inline constexpr uint32_t MOTOR_PWM_FREQUENCY = 20000;
 // =====================================================
 
 inline constexpr uint8_t IR_FRONT_LEFT_PIN  = PA5;
-inline constexpr uint8_t IR_FRONT_RIGHT_PIN = PA6;
-inline constexpr uint8_t IR_REAR_PIN        = PA7;
+inline constexpr uint8_t IR_FRONT_RIGHT_PIN = PB15;
+inline constexpr uint8_t IR_REAR_PIN        = PA8;
 
 // =====================================================
 // DIP SWITCH
 // =====================================================
 
-inline constexpr uint8_t DIP1_PIN = PA8;
-inline constexpr uint8_t DIP2_PIN = PA9;
+inline constexpr uint8_t DIP1_PIN = PB4;
+inline constexpr uint8_t DIP2_PIN = PB5;
 
 // =====================================================
 // Simulation
