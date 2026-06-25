@@ -43,7 +43,7 @@ void TOF::begin()
     }
     delay(10);
 
-    for (int i = 0; i < 2; i++)
+    for (int i = 0; i < SENSOR_COUNT; i++)
     {
         initSensor(i);
     }
@@ -52,7 +52,7 @@ void TOF::begin()
 
 void TOF::update()
 {   
-    for (int i = 0; i < 2; i++)
+    for (int i = 0; i < SENSOR_COUNT; i++)
     {
         if (!sensorReady[i])
         {
