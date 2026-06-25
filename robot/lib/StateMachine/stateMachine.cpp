@@ -5,8 +5,7 @@ void Robot::begin()
     tof.begin();
     motor.begin();
 
-    pinMode(IR_FRONT_LEFT_PIN, INPUT_PULLUP);
-    pinMode(IR_FRONT_RIGHT_PIN, INPUT_PULLUP);
+    pinMode(IR_FRONT_PIN, INPUT_PULLUP);
     pinMode(IR_REAR_PIN , INPUT_PULLUP);
 
     pinMode(DIP1_PIN, INPUT_PULLUP);
@@ -21,6 +20,7 @@ void Robot::stop()
     state = SEARCH;
     escapeState = ESCAPE_BACK;
     lastSeenDirection = NONE;
+    lastSeenTime = 0;
 }
 
 void Robot::update()
@@ -110,18 +110,15 @@ void Robot::updateState()
 
 EdgeDirection Robot::getEdgeDirection()
 {
-    if (digitalRead(IR_FRONT_LEFT_PIN) == LOW)
-    {
-        return FRONT_LEFT_EDGE;
-    }
-    if (digitalRead(IR_FRONT_RIGHT_PIN) == LOW)
-    {
-        return FRONT_RIGHT_EDGE;
-    }
+    if (digitalRead(IR_FRONT_PIN) == LOW)
+        {
+            return FRONT_EDGE;
+        }
+
     if (digitalRead(IR_REAR_PIN) == LOW)
-    {
-        return REAR_EDGE;
-    }
+        {
+            return REAR_EDGE;
+        }
     return NO_EDGE;
 }
 
@@ -204,15 +201,13 @@ void Robot::escape()
     {
         case ESCAPE_BACK:
 
-            switch(edgeDirection)
+            if(edgeDirection == REAR_EDGE)
             {
-                case REAR_EDGE:
-                    motor.drive(255, 255);
-                    break;
-
-                default:
-                    motor.drive(-255, -255);
-                    break;
+                motor.drive(255, 255);
+            }
+            else
+            {
+                motor.drive(-255, -255);
             }
 
             if (millis() - escapeTimer > ESCAPE_BACK_TIME)
@@ -224,25 +219,8 @@ void Robot::escape()
 
         case ESCAPE_TURN:
 
-            switch(edgeDirection)
-            {
-                case FRONT_LEFT_EDGE: 
-                    motor.drive(255, -255);
-                    break;
-
-                case FRONT_RIGHT_EDGE: 
-                    motor.drive(-255, 255);
-                    break;
-
-                case REAR_EDGE:
-                    motor.drive(255, -255);
-                    break;
-
-                default:
-                    motor.drive(255, -255);
-                    break;
-            }
-
+             motor.drive(255, -255);
+            
             if (millis() - escapeTimer > ESCAPE_TURN_TIME)
             {
                 escapeState = ESCAPE_BACK;
@@ -260,7 +238,6 @@ void Robot::readStrategy()
         return;
     }
 
-    
     uint8_t dip = (!digitalRead(DIP1_PIN) << 0) | (!digitalRead(DIP2_PIN) << 1);
 
     switch (dip)
@@ -279,7 +256,7 @@ void Robot::readStrategy()
 
         case 3:
             currentStrategy = STRATEGY_4;
-            break;
+            break;  
     }
 }
 
@@ -290,20 +267,39 @@ Direction Robot::getTargetDirection()
         return simulatedDistance > 0 ? FRONT_DIR : NONE;
     }
 
-    bool left =
-        tof.getDistance(FRONT1) > 0;
+    uint16_t front1 = tof.getDistance(FRONT1);
+    uint16_t front2 = tof.getDistance(FRONT2);
 
-    bool right =
-        tof.getDistance(FRONT2) > 0;
+    uint16_t left   = tof.getDistance(LEFT);
+    uint16_t right  = tof.getDistance(RIGHT);
 
-    if (left && right)
+    // =========================
+    // PRIORITAS 1
+    // Tracking depan
+    // =========================
+
+    bool frontLeft  = front1 > 0;
+    bool frontRight = front2 > 0;
+
+    if (frontLeft && frontRight)
         return FRONT_DIR;
 
-    if (left)
+    if (frontLeft)
         return LEFT_DIR;
 
-    if (right)
+    if (frontRight)
         return RIGHT_DIR;
+
+    // =========================
+    // PRIORITAS 2
+    // Search assist
+    // =========================
+
+    bool leftDetected = left > 0 && left < SIDE_DETECT_DISTANCE;
+    bool rightDetected = right > 0 && right < SIDE_DETECT_DISTANCE;
+
+    if (leftDetected && !rightDetected) return LEFT_DIR;
+    if (rightDetected && !leftDetected) return RIGHT_DIR;
 
     return NONE;
 }
@@ -359,7 +355,7 @@ void Robot::handleSimulation()
             break;
 
         case 'e':
-            simulatedEdge = FRONT_LEFT_EDGE;
+            simulatedEdge = FRONT_EDGE;
             Serial.println("Edge");
             break;
 

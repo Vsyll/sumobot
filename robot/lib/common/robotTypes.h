@@ -18,8 +18,7 @@ enum Direction
 enum EdgeDirection
 {
     NO_EDGE,
-    FRONT_LEFT_EDGE,
-    FRONT_RIGHT_EDGE,
+    FRONT_EDGE,
     REAR_EDGE
 };
 

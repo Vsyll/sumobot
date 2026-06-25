@@ -87,9 +87,8 @@ inline constexpr uint32_t MOTOR_PWM_FREQUENCY = 20000;
 // IR
 // =====================================================
 
-inline constexpr uint8_t IR_FRONT_LEFT_PIN  = PA5;
-inline constexpr uint8_t IR_FRONT_RIGHT_PIN = PB15;
-inline constexpr uint8_t IR_REAR_PIN        = PA8;
+inline constexpr uint8_t IR_FRONT_PIN   = PB15;
+inline constexpr uint8_t IR_REAR_PIN    = PA8;
 
 // =====================================================
 // DIP SWITCH
@@ -118,6 +117,8 @@ enum StrategyID
 
 inline constexpr uint16_t ATTACK_DISTANCE = 600;
 inline constexpr uint16_t LAST_SEEN_TIMEOUT = 1000;
+
+constexpr uint16_t SIDE_DETECT_DISTANCE = 500;
 
 inline constexpr uint16_t ESCAPE_BACK_TIME = 300;
 inline constexpr uint16_t ESCAPE_TURN_TIME = 250;
